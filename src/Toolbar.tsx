@@ -3,7 +3,7 @@ import type { Filter } from './appReducer'
 
 const FILTERS: Filter[] = ['all', 'active', 'completed']
 
-export function FilterBar() {
+export function Toolbar() {
   const { state, dispatch } = useTodos()
   const { todos, filter } = state
 
