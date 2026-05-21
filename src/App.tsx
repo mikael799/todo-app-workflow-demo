@@ -1,21 +1,6 @@
-import { TodoProvider, useTodos } from './TodoContext'
+import { TodoProvider } from './TodoContext'
 import { TodoInput } from './TodoInput'
-
-function TodoList() {
-  const { todos } = useTodos()
-  if (todos.length === 0) {
-    return <p className="text-gray-500 mt-4">No todos yet</p>
-  }
-  return (
-    <ul className="mt-4 space-y-2">
-      {todos.map((todo) => (
-        <li key={todo.id} className="border rounded p-2">
-          {todo.title}
-        </li>
-      ))}
-    </ul>
-  )
-}
+import { TodoList } from './TodoList'
 
 function App() {
   return (
