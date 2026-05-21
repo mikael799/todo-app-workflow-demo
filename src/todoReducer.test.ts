@@ -20,4 +20,21 @@ describe('todoReducer', () => {
     expect(state[0].title).toBe('First')
     expect(state[1].title).toBe('Second')
   })
+
+  it('TOGGLE_TODO flips the completed flag for the given id', () => {
+    const existing: Todo[] = [
+      { id: '1', title: 'Buy milk', completed: false, createdAt: '2025-01-01' },
+    ]
+    const state = todoReducer(existing, { type: 'TOGGLE_TODO', id: '1' })
+    expect(state[0].completed).toBe(true)
+  })
+
+  it('TOGGLE_TODO with unknown id is a no-op', () => {
+    const existing: Todo[] = [
+      { id: '1', title: 'Buy milk', completed: false, createdAt: '2025-01-01' },
+    ]
+    const state = todoReducer(existing, { type: 'TOGGLE_TODO', id: '999' })
+    expect(state).toHaveLength(1)
+    expect(state[0].completed).toBe(false)
+  })
 })
