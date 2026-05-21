@@ -1,10 +1,11 @@
 import { useTodos } from './TodoContext'
-import type { Filter } from './TodoContext'
+import type { Filter } from './appReducer'
 
 const FILTERS: Filter[] = ['all', 'active', 'completed']
 
 export function FilterBar() {
-  const { filter, setFilter, todos, dispatch } = useTodos()
+  const { state, dispatch } = useTodos()
+  const { todos, filter } = state
 
   const hasCompleted = todos.some((t) => t.completed)
 
@@ -13,7 +14,7 @@ export function FilterBar() {
       {FILTERS.map((f) => (
         <button
           key={f}
-          onClick={() => setFilter(f)}
+          onClick={() => dispatch({ type: 'SET_FILTER', filter: f })}
           className={filter === f ? 'font-bold' : ''}
         >
           {f.charAt(0).toUpperCase() + f.slice(1)}

@@ -5,11 +5,11 @@ import { TodoProvider, useTodos } from './TodoContext'
 import { TodoInput } from './TodoInput'
 
 function TestApp() {
-  const { todos } = useTodos()
+  const { state } = useTodos()
   return (
     <div>
       <TodoInput />
-      <span data-testid="count">{todos.length}</span>
+      <span data-testid="count">{state.todos.length}</span>
     </div>
   )
 }

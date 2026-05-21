@@ -1,31 +1,27 @@
 import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react'
-import { todoReducer, type Todo, type Action } from './todoReducer'
+import { appReducer, type AppState, type AppAction } from './appReducer'
 import { readTodos, writeTodos } from './localStorage'
 
-export type Filter = 'all' | 'active' | 'completed'
-
 interface TodoContextValue {
-  todos: Todo[]
-  dispatch: React.Dispatch<Action>
-  filter: Filter
-  setFilter: (f: Filter) => void
+  state: AppState
+  dispatch: React.Dispatch<AppAction>
 }
 
 const TodoContext = createContext<TodoContextValue | null>(null)
 
+function init(): AppState {
+  return { todos: readTodos(), filter: 'all' }
+}
+
 export function TodoProvider({ children }: { children: ReactNode }) {
-  const [todos, dispatch] = useReducer(todoReducer, readTodos())
-  const [filter, setFilter] = useReducer(
-    (_: Filter, next: Filter) => next,
-    'all' as Filter,
-  )
+  const [state, dispatch] = useReducer(appReducer, undefined, init)
 
   useEffect(() => {
-    writeTodos(todos)
-  }, [todos])
+    writeTodos(state.todos)
+  }, [state.todos])
 
   return (
-    <TodoContext.Provider value={{ todos, dispatch, filter, setFilter }}>
+    <TodoContext.Provider value={{ state, dispatch }}>
       {children}
     </TodoContext.Provider>
   )
