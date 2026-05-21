@@ -2,7 +2,7 @@ import { createContext, useContext, useReducer, useEffect, type ReactNode } from
 import { todoReducer, type Todo, type Action } from './todoReducer'
 import { readTodos, writeTodos } from './localStorage'
 
-type Filter = 'all' | 'active' | 'completed'
+export type Filter = 'all' | 'active' | 'completed'
 
 interface TodoContextValue {
   todos: Todo[]

@@ -9,6 +9,7 @@ export type Action =
   | { type: 'ADD_TODO'; title: string }
   | { type: 'TOGGLE_TODO'; id: string }
   | { type: 'DELETE_TODO'; id: string }
+  | { type: 'CLEAR_COMPLETED' }
 
 export function todoReducer(todos: Todo[], action: Action): Todo[] {
   switch (action.type) {
@@ -28,6 +29,8 @@ export function todoReducer(todos: Todo[], action: Action): Todo[] {
       )
     case 'DELETE_TODO':
       return todos.filter((t) => t.id !== action.id)
+    case 'CLEAR_COMPLETED':
+      return todos.filter((t) => !t.completed)
     default:
       return todos
   }

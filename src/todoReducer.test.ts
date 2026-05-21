@@ -60,4 +60,23 @@ describe('todoReducer', () => {
     const state = todoReducer([], { type: 'DELETE_TODO', id: '1' })
     expect(state).toHaveLength(0)
   })
+
+  it('CLEAR_COMPLETED removes all completed todos', () => {
+    const existing: Todo[] = [
+      { id: '1', title: 'Active', completed: false, createdAt: '2025-01-01' },
+      { id: '2', title: 'Done', completed: true, createdAt: '2025-01-02' },
+      { id: '3', title: 'Also done', completed: true, createdAt: '2025-01-03' },
+    ]
+    const state = todoReducer(existing, { type: 'CLEAR_COMPLETED' })
+    expect(state).toHaveLength(1)
+    expect(state[0].id).toBe('1')
+  })
+
+  it('CLEAR_COMPLETED with no completed todos is a no-op', () => {
+    const existing: Todo[] = [
+      { id: '1', title: 'Active', completed: false, createdAt: '2025-01-01' },
+    ]
+    const state = todoReducer(existing, { type: 'CLEAR_COMPLETED' })
+    expect(state).toHaveLength(1)
+  })
 })
