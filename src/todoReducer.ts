@@ -8,6 +8,7 @@ export interface Todo {
 export type Action =
   | { type: 'ADD_TODO'; title: string }
   | { type: 'TOGGLE_TODO'; id: string }
+  | { type: 'DELETE_TODO'; id: string }
 
 export function todoReducer(todos: Todo[], action: Action): Todo[] {
   switch (action.type) {
@@ -25,6 +26,8 @@ export function todoReducer(todos: Todo[], action: Action): Todo[] {
       return todos.map((t) =>
         t.id === action.id ? { ...t, completed: !t.completed } : t,
       )
+    case 'DELETE_TODO':
+      return todos.filter((t) => t.id !== action.id)
     default:
       return todos
   }
