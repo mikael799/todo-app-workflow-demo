@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useTodos } from './TodoContext'
+import { useTodos } from './useTodos'
 
 export function TodoInput() {
   const [text, setText] = useState('')
