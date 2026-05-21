@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TodoProvider, useTodos } from './TodoContext'
 import { TodoInput } from './TodoInput'
+import { inMemoryAdapter } from './persistence'
 
 function TestApp() {
   const { state } = useTodos()
@@ -14,14 +15,11 @@ function TestApp() {
   )
 }
 
-beforeEach(() => {
-  localStorage.clear()
-})
-
 describe('TodoInput', () => {
   it('submits a new todo and adds it to the list', async () => {
+    const adapter = inMemoryAdapter()
     render(
-      <TodoProvider>
+      <TodoProvider persist={adapter}>
         <TestApp />
       </TodoProvider>,
     )
@@ -32,8 +30,9 @@ describe('TodoInput', () => {
   })
 
   it('does not submit empty input', async () => {
+    const adapter = inMemoryAdapter()
     render(
-      <TodoProvider>
+      <TodoProvider persist={adapter}>
         <TestApp />
       </TodoProvider>,
     )

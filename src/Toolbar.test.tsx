@@ -1,12 +1,17 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TodoProvider } from './TodoContext'
 import { Toolbar } from './Toolbar'
+import { inMemoryAdapter } from './persistence'
+import type { Todo } from './todoReducer'
 
-beforeEach(() => {
-  localStorage.clear()
-})
+function completedFixture(): Todo[] {
+  return [
+    { id: '1', title: 'Active', completed: false, createdAt: '2025-01-01' },
+    { id: '2', title: 'Done', completed: true, createdAt: '2025-01-02' },
+  ]
+}
 
 describe('Toolbar', () => {
   it('renders three filter buttons', () => {
@@ -41,15 +46,8 @@ describe('Toolbar', () => {
   })
 
   it('shows clear completed button only when there are completed todos', () => {
-    localStorage.setItem(
-      'todos',
-      JSON.stringify([
-        { id: '1', title: 'Active', completed: false, createdAt: '2025-01-01' },
-        { id: '2', title: 'Done', completed: true, createdAt: '2025-01-02' },
-      ]),
-    )
     render(
-      <TodoProvider>
+      <TodoProvider persist={inMemoryAdapter(completedFixture())}>
         <Toolbar />
       </TodoProvider>,
     )
@@ -66,15 +64,8 @@ describe('Toolbar', () => {
   })
 
   it('removes completed todos when clear completed is clicked', async () => {
-    localStorage.setItem(
-      'todos',
-      JSON.stringify([
-        { id: '1', title: 'Active', completed: false, createdAt: '2025-01-01' },
-        { id: '2', title: 'Done', completed: true, createdAt: '2025-01-02' },
-      ]),
-    )
     render(
-      <TodoProvider>
+      <TodoProvider persist={inMemoryAdapter(completedFixture())}>
         <Toolbar />
       </TodoProvider>,
     )

@@ -1,7 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TodoProvider, useTodos } from './TodoContext'
+import { inMemoryAdapter } from './persistence'
 
 function TestComponent() {
   const { state, dispatch } = useTodos()
@@ -15,10 +16,6 @@ function TestComponent() {
     </div>
   )
 }
-
-beforeEach(() => {
-  localStorage.clear()
-})
 
 describe('TodoContext', () => {
   it('provides initial state with empty todos and all filter', () => {
@@ -41,30 +38,27 @@ describe('TodoContext', () => {
     expect(screen.getByTestId('count')).toHaveTextContent('1')
   })
 
-  it('hydrates initial state from localStorage', () => {
-    localStorage.setItem(
-      'todos',
-      JSON.stringify([
-        { id: '1', title: 'Saved', completed: false, createdAt: '2025-01-01' },
-      ]),
-    )
+  it('hydrates initial state from persistence', () => {
+    const adapter = inMemoryAdapter([
+      { id: '1', title: 'Saved', completed: false, createdAt: '2025-01-01' },
+    ])
     render(
-      <TodoProvider>
+      <TodoProvider persist={adapter}>
         <TestComponent />
       </TodoProvider>,
     )
     expect(screen.getByTestId('count')).toHaveTextContent('1')
   })
 
-  it('persists todos to localStorage after dispatch', async () => {
+  it('persists todos to persistence after dispatch', async () => {
+    const adapter = inMemoryAdapter()
     render(
-      <TodoProvider>
+      <TodoProvider persist={adapter}>
         <TestComponent />
       </TodoProvider>,
     )
     await userEvent.click(screen.getByText('Add'))
-    const stored = JSON.parse(localStorage.getItem('todos')!)
-    expect(stored).toHaveLength(1)
-    expect(stored[0].title).toBe('New')
+    expect(adapter.read()).toHaveLength(1)
+    expect(adapter.read()[0].title).toBe('New')
   })
 })

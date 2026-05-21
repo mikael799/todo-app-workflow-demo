@@ -1,24 +1,28 @@
 import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react'
 import { appReducer, type AppState, type AppAction } from './appReducer'
-import { readTodos, writeTodos } from './localStorage'
+import { localStorageAdapter, type PersistenceAdapter } from './persistence'
 
 interface TodoContextValue {
   state: AppState
   dispatch: React.Dispatch<AppAction>
 }
 
-const TodoContext = createContext<TodoContextValue | null>(null)
-
-function init(): AppState {
-  return { todos: readTodos(), filter: 'all' }
+interface TodoProviderProps {
+  children: ReactNode
+  persist?: PersistenceAdapter
 }
 
-export function TodoProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(appReducer, undefined, init)
+const TodoContext = createContext<TodoContextValue | null>(null)
+
+export function TodoProvider({ children, persist = localStorageAdapter }: TodoProviderProps) {
+  const [state, dispatch] = useReducer(appReducer, persist, (p) => ({
+    todos: p.read(),
+    filter: 'all',
+  }))
 
   useEffect(() => {
-    writeTodos(state.todos)
-  }, [state.todos])
+    persist.write(state.todos)
+  }, [state.todos, persist])
 
   return (
     <TodoContext.Provider value={{ state, dispatch }}>
