@@ -37,4 +37,27 @@ describe('todoReducer', () => {
     expect(state).toHaveLength(1)
     expect(state[0].completed).toBe(false)
   })
+
+  it('DELETE_TODO removes the todo with the given id', () => {
+    const existing: Todo[] = [
+      { id: '1', title: 'First', completed: false, createdAt: '2025-01-01' },
+      { id: '2', title: 'Second', completed: false, createdAt: '2025-01-02' },
+    ]
+    const state = todoReducer(existing, { type: 'DELETE_TODO', id: '1' })
+    expect(state).toHaveLength(1)
+    expect(state[0].id).toBe('2')
+  })
+
+  it('DELETE_TODO with unknown id is a no-op', () => {
+    const existing: Todo[] = [
+      { id: '1', title: 'First', completed: false, createdAt: '2025-01-01' },
+    ]
+    const state = todoReducer(existing, { type: 'DELETE_TODO', id: '999' })
+    expect(state).toHaveLength(1)
+  })
+
+  it('DELETE_TODO on an empty list does nothing', () => {
+    const state = todoReducer([], { type: 'DELETE_TODO', id: '1' })
+    expect(state).toHaveLength(0)
+  })
 })

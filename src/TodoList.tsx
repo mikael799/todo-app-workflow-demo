@@ -25,6 +25,7 @@ export function TodoList() {
           <TodoItem
             todo={todo}
             onToggle={(id) => dispatch({ type: 'TOGGLE_TODO', id })}
+            onDelete={(id) => dispatch({ type: 'DELETE_TODO', id })}
           />
         </li>
       ))}
