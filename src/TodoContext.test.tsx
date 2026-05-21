@@ -4,11 +4,11 @@ import userEvent from '@testing-library/user-event'
 import { TodoProvider, useTodos } from './TodoContext'
 
 function TestComponent() {
-  const { todos, filter, dispatch } = useTodos()
+  const { state, dispatch } = useTodos()
   return (
     <div>
-      <span data-testid="filter">{filter}</span>
-      <span data-testid="count">{todos.length}</span>
+      <span data-testid="filter">{state.filter}</span>
+      <span data-testid="count">{state.todos.length}</span>
       <button onClick={() => dispatch({ type: 'ADD_TODO', title: 'New' })}>
         Add
       </button>

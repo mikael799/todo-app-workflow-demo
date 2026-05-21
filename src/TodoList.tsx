@@ -2,7 +2,8 @@ import { useTodos } from './TodoContext'
 import { TodoItem } from './TodoItem'
 
 export function TodoList() {
-  const { todos, filter, dispatch } = useTodos()
+  const { state, dispatch } = useTodos()
+  const { todos, filter } = state
 
   const filtered = todos.filter((todo) => {
     if (filter === 'active') return !todo.completed
