@@ -1,4 +1,4 @@
-import { useTodos } from './TodoContext'
+import { useTodos } from './useTodos'
 import type { Filter } from './appReducer'
 
 const FILTERS: Filter[] = ['all', 'active', 'completed']
