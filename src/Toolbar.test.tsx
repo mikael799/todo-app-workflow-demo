@@ -2,17 +2,17 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TodoProvider } from './TodoContext'
-import { FilterBar } from './FilterBar'
+import { Toolbar } from './Toolbar'
 
 beforeEach(() => {
   localStorage.clear()
 })
 
-describe('FilterBar', () => {
+describe('Toolbar', () => {
   it('renders three filter buttons', () => {
     render(
       <TodoProvider>
-        <FilterBar />
+        <Toolbar />
       </TodoProvider>,
     )
     expect(screen.getByRole('button', { name: /all/i })).toBeInTheDocument()
@@ -23,7 +23,7 @@ describe('FilterBar', () => {
   it('highlights the active filter button', () => {
     render(
       <TodoProvider>
-        <FilterBar />
+        <Toolbar />
       </TodoProvider>,
     )
     expect(screen.getByRole('button', { name: /all/i })).toHaveClass('font-bold')
@@ -32,7 +32,7 @@ describe('FilterBar', () => {
   it('switches filter when a filter button is clicked', async () => {
     render(
       <TodoProvider>
-        <FilterBar />
+        <Toolbar />
       </TodoProvider>,
     )
     await userEvent.click(screen.getByRole('button', { name: /completed/i }))
@@ -50,7 +50,7 @@ describe('FilterBar', () => {
     )
     render(
       <TodoProvider>
-        <FilterBar />
+        <Toolbar />
       </TodoProvider>,
     )
     expect(screen.getByRole('button', { name: /clear completed/i })).toBeInTheDocument()
@@ -59,7 +59,7 @@ describe('FilterBar', () => {
   it('hides clear completed button when no completed todos', () => {
     render(
       <TodoProvider>
-        <FilterBar />
+        <Toolbar />
       </TodoProvider>,
     )
     expect(screen.queryByRole('button', { name: /clear completed/i })).not.toBeInTheDocument()
@@ -75,7 +75,7 @@ describe('FilterBar', () => {
     )
     render(
       <TodoProvider>
-        <FilterBar />
+        <Toolbar />
       </TodoProvider>,
     )
     await userEvent.click(screen.getByRole('button', { name: /clear completed/i }))
